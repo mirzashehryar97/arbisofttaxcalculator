@@ -93,7 +93,6 @@ const TaxCalculator: React.FC = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Arbisoft Tax Calculator 2024-2025</h1>
-      <p className={styles.description}>This is latest tax calculator as per 2024-2025 budget presented by government of Pakistan.</p>
       
       <input
         type="number"
