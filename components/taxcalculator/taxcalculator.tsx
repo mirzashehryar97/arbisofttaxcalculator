@@ -21,6 +21,8 @@ interface TaxInfo {
   revisedYearlyIncomeAfterTax: number;
   totalMonthlyEarningsAfterTax: number;
   totalYearlyEarningsAfterTax: number;
+  actualProvidentFund: number;
+  revisedProvidentFund: number;
 }
 
 function calculateYearlyTax(yearlyIncome: number): number {
@@ -45,21 +47,28 @@ function calculateTax(monthlyIncome: number, monthlyFuelExpense: number, monthly
   const revisedYearlyIncome = revisedMonthlyIncome * 12;
   const actualYearlyTax = calculateYearlyTax(actualYearlyIncome);
   const revisedYearlyTax = calculateYearlyTax(revisedYearlyIncome);
-  const revisedMonthlySalaryAfterTax = revisedMonthlyIncome - (revisedYearlyTax / 12)
+  const actualMonthlyTax = actualYearlyTax / 12;
+  const revisedMonthlyTax = revisedYearlyTax / 12;
+  const monthlySalaryAfterTax = monthlyIncome - actualMonthlyTax;
+  const revisedMonthlySalaryAfterTax = revisedMonthlyIncome - revisedMonthlyTax;
   const totalMonthlyEarningsAfterTax = revisedMonthlySalaryAfterTax + monthlyFuelExpense + monthlyUtilitiesExpense;
   const totalYearlyExpenses = (monthlyFuelExpense * 12) + (monthlyUtilitiesExpense * 12)
   const revisedYearlyIncomeAfterTax = revisedYearlyIncome - revisedYearlyTax;
   const totalYearlyEarningsAfterTax = revisedYearlyIncomeAfterTax + totalYearlyExpenses;
+
+
+  const actualProvidentFund = calculateProvidentFund(monthlyIncome);
+  const revisedProvidentFund = calculateProvidentFund(revisedMonthlyIncome);
   
   return {
     monthlyIncome: monthlyIncome,
     monthlyFuelExpense: monthlyFuelExpense,
     monthlyUtilitiesExpense: monthlyUtilitiesExpense,
     revisedMonthlyIncome: revisedMonthlyIncome,
-    revisedMonthlyTax: revisedYearlyTax / 12,
-    actualMonthlyTax: actualYearlyTax / 12,
+    revisedMonthlyTax: revisedMonthlyTax,
+    actualMonthlyTax: actualMonthlyTax,
     monthlyTaxSavings: (actualYearlyTax - revisedYearlyTax) / 12,
-    monthlySalaryAfterTax: monthlyIncome - (actualYearlyTax / 12),
+    monthlySalaryAfterTax: monthlySalaryAfterTax,
     revisedMonthlySalaryAfterTax: revisedMonthlySalaryAfterTax,
     actualYearlyIncome: actualYearlyIncome,
     revisedYearlyIncome: revisedYearlyIncome,
@@ -69,12 +78,20 @@ function calculateTax(monthlyIncome: number, monthlyFuelExpense: number, monthly
     actualYearlyIncomeAfterTax: actualYearlyIncome - actualYearlyTax,
     revisedYearlyIncomeAfterTax: revisedYearlyIncomeAfterTax,
     totalMonthlyEarningsAfterTax: totalMonthlyEarningsAfterTax,
-    totalYearlyEarningsAfterTax: totalYearlyEarningsAfterTax
+    totalYearlyEarningsAfterTax: totalYearlyEarningsAfterTax,
+    actualProvidentFund: actualProvidentFund,
+    revisedProvidentFund: revisedProvidentFund
   };
 }
 
 function formatNumber(num: number): string {
   return num.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function calculateProvidentFund(grossSalary: number): number {
+  const eligibleSalary = grossSalary * 0.65;
+  const providentFund = eligibleSalary * 0.08;
+  return providentFund;
 }
 
 const TaxCalculator: React.FC = () => {
@@ -147,6 +164,14 @@ const TaxCalculator: React.FC = () => {
       <div className={styles.resultRow}>
         <span className={styles.label}>{`Total Monthly Earnings After Tax (Revised + Expenses)`}</span>
         <span className={styles.value}>{formatNumber(taxInfo.totalMonthlyEarningsAfterTax)}</span>
+      </div>
+      <div className={styles.resultRow}>
+        <span className={styles.label}>Actual Monthly Provident Fund</span>
+        <span className={styles.value}>{formatNumber(taxInfo.actualProvidentFund)}</span>
+      </div>
+      <div className={styles.resultRow}>
+        <span className={styles.label}>Revised Monthly Provident Fund</span>
+        <span className={styles.value}>{formatNumber(taxInfo.revisedProvidentFund)}</span>
       </div>
       <div className={styles.resultRow}>
         <span className={styles.label}>Actual Yearly Income</span>
