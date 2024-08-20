@@ -191,12 +191,8 @@ const TaxCalculator: React.FC = () => {
         <span className={styles.value}>{formatNumber(taxInfo.totalMonthlyEarningsAfterTax)}</span>
       </div>
       <div className={styles.resultRow}>
-        <span className={styles.label}>Actual Monthly Provident Fund</span>
+        <span className={styles.label}>{`Monthly Provident Fund (Based on Actual Salary)`}</span>
         <span className={styles.value}>{formatNumber(taxInfo.actualProvidentFund)}</span>
-      </div>
-      <div className={styles.resultRow}>
-        <span className={styles.label}>Revised Monthly Provident Fund</span>
-        <span className={styles.value}>{formatNumber(taxInfo.revisedProvidentFund)}</span>
       </div>
       <div className={styles.resultRow}>
         <span className={styles.label}>Actual Yearly Income</span>
