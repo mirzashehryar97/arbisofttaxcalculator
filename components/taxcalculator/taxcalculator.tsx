@@ -10,6 +10,7 @@ interface TaxInfo {
   revisedMonthlyTax: number;
   actualMonthlyTax: number;
   monthlyTaxSavings: number;
+  monthlyTaxSavingsPercentage: number;
   monthlySalaryAfterTax: number;
   revisedMonthlySalaryAfterTax: number;
   actualYearlyIncome: number;
@@ -21,8 +22,13 @@ interface TaxInfo {
   revisedYearlyIncomeAfterTax: number;
   totalMonthlyEarningsAfterTax: number;
   totalYearlyEarningsAfterTax: number;
+  yearlyTaxSavingsPercentage: number;
   actualProvidentFund: number;
   revisedProvidentFund: number;
+}
+
+function formatPercentage(num: number): string {
+  return num.toFixed(2) + '%';
 }
 
 function calculateYearlyTax(yearlyIncome: number): number {
@@ -41,7 +47,8 @@ function calculateYearlyTax(yearlyIncome: number): number {
   }
 }
 
-function calculateTax(monthlyIncome: number, monthlyFuelExpense: number, monthlyUtilitiesExpense: number): TaxInfo {
+function calculateTax(monthlyIncome: number, monthlyFuelExpense: number): TaxInfo {
+  const monthlyUtilitiesExpense = monthlyIncome * 0.15;
   const revisedMonthlyIncome = Math.max(0, monthlyIncome - monthlyFuelExpense - monthlyUtilitiesExpense);
   const actualYearlyIncome = monthlyIncome * 12;
   const revisedYearlyIncome = revisedMonthlyIncome * 12;
@@ -55,6 +62,10 @@ function calculateTax(monthlyIncome: number, monthlyFuelExpense: number, monthly
   const totalYearlyExpenses = (monthlyFuelExpense * 12) + (monthlyUtilitiesExpense * 12)
   const revisedYearlyIncomeAfterTax = revisedYearlyIncome - revisedYearlyTax;
   const totalYearlyEarningsAfterTax = revisedYearlyIncomeAfterTax + totalYearlyExpenses;
+  const yearlyTaxSavings =  actualYearlyTax - revisedYearlyTax
+  const yearlyTaxSavingsPercentage = actualYearlyTax > 0 
+    ? (yearlyTaxSavings / actualYearlyTax) * 100 
+    : 0;
 
 
   const actualProvidentFund = calculateProvidentFund(monthlyIncome);
@@ -68,6 +79,7 @@ function calculateTax(monthlyIncome: number, monthlyFuelExpense: number, monthly
     revisedMonthlyTax: revisedMonthlyTax,
     actualMonthlyTax: actualMonthlyTax,
     monthlyTaxSavings: (actualYearlyTax - revisedYearlyTax) / 12,
+    monthlyTaxSavingsPercentage: yearlyTaxSavingsPercentage,
     monthlySalaryAfterTax: monthlySalaryAfterTax,
     revisedMonthlySalaryAfterTax: revisedMonthlySalaryAfterTax,
     actualYearlyIncome: actualYearlyIncome,
@@ -75,6 +87,7 @@ function calculateTax(monthlyIncome: number, monthlyFuelExpense: number, monthly
     revisedYearlyTax: revisedYearlyTax,
     actualYearlyTax: actualYearlyTax,
     yearlyTaxSavings: actualYearlyTax - revisedYearlyTax,
+    yearlyTaxSavingsPercentage: yearlyTaxSavingsPercentage,
     actualYearlyIncomeAfterTax: actualYearlyIncome - actualYearlyTax,
     revisedYearlyIncomeAfterTax: revisedYearlyIncomeAfterTax,
     totalMonthlyEarningsAfterTax: totalMonthlyEarningsAfterTax,
@@ -97,41 +110,49 @@ function calculateProvidentFund(grossSalary: number): number {
 const TaxCalculator: React.FC = () => {
   const [monthlyIncome, setMonthlyIncome] = useState<string>('');
   const [monthlyFuelExpense, setMonthlyFuelExpense] = useState<string>('');
-  const [monthlyUtilitiesExpense, setMonthlyUtilitiesExpense] = useState<string>('');
-  const [taxInfo, setTaxInfo] = useState<TaxInfo>(calculateTax(0, 0, 0));
+  const [taxInfo, setTaxInfo] = useState<TaxInfo>(calculateTax(0, 0));
 
   useEffect(() => {
     const income = parseFloat(monthlyIncome) || 0;
     const fuelExpense = parseFloat(monthlyFuelExpense) || 0;
-    const utilitiesExpense = parseFloat(monthlyUtilitiesExpense) || 0;
-    setTaxInfo(calculateTax(income, fuelExpense, utilitiesExpense));
-  }, [monthlyIncome, monthlyFuelExpense, monthlyUtilitiesExpense]);
+    setTaxInfo(calculateTax(income, fuelExpense));
+  }, [monthlyIncome, monthlyFuelExpense]);
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Arbisoft Tax Calculator 2024-2025</h1>
       
-      <input
-        type="number"
-        className={styles.input}
-        placeholder="Enter monthly income"
-        value={monthlyIncome}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMonthlyIncome(e.target.value)}
-      />
-      <input
-        type="number"
-        className={styles.input}
-        placeholder="Enter monthly fuel expense"
-        value={monthlyFuelExpense}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMonthlyFuelExpense(e.target.value)}
-      />
-      <input
-        type="number"
-        className={styles.input}
-        placeholder="Enter monthly utilities expense"
-        value={monthlyUtilitiesExpense}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMonthlyUtilitiesExpense(e.target.value)}
-      />
+      <div className={styles.inputGroup}>
+        <label className={styles.label}>Monthly Income</label>
+        <input
+          type="number"
+          className={styles.input}
+          placeholder="Enter monthly income"
+          value={monthlyIncome}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMonthlyIncome(e.target.value)}
+        />
+      </div>
+      
+      <div className={styles.inputGroup}>
+        <label className={styles.label}>Monthly Fuel Expense</label>
+        <input
+          type="number"
+          className={styles.input}
+          placeholder="Enter monthly fuel expense"
+          value={monthlyFuelExpense}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMonthlyFuelExpense(e.target.value)}
+        />
+      </div>
+      
+      <div className={styles.inputGroup}>
+        <label className={styles.label}>Monthly Utilities Expense (15% of income)</label>
+        <input
+          type="text"
+          className={`${styles.input} ${styles.readOnly}`}
+          value={formatNumber(taxInfo.monthlyUtilitiesExpense)}
+          readOnly
+        />
+      </div>
       
       <div className={styles.resultRow}>
         <span className={styles.label}>Actual Monthly Income</span>
@@ -152,6 +173,10 @@ const TaxCalculator: React.FC = () => {
       <div className={styles.resultRow}>
         <span className={styles.label}>Monthly Tax Savings</span>
         <span className={styles.savingValue}>{formatNumber(taxInfo.monthlyTaxSavings)}</span>
+      </div>
+      <div className={styles.resultRow}>
+        <span className={styles.label}>Monthly Tax Savings Percentage</span>
+        <span className={styles.savingValue}>{formatPercentage(taxInfo.monthlyTaxSavingsPercentage)}</span>
       </div>
       <div className={styles.resultRow}>
         <span className={styles.label}>Actual Monthly Salary After Tax</span>
@@ -192,6 +217,10 @@ const TaxCalculator: React.FC = () => {
       <div className={styles.resultRow}>
         <span className={styles.label}>Yearly Tax Savings</span>
         <span className={styles.savingValue}>{formatNumber(taxInfo.yearlyTaxSavings)}</span>
+      </div>
+      <div className={styles.resultRow}>
+        <span className={styles.label}>Yearly Tax Savings Percentage</span>
+        <span className={styles.savingValue}>{formatPercentage(taxInfo.yearlyTaxSavingsPercentage)}</span>
       </div>
       <div className={styles.resultRow}>
         <span className={styles.label}>Actual Yearly Income After Tax</span>

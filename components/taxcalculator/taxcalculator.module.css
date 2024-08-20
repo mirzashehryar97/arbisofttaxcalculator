@@ -53,9 +53,18 @@
 
   }
 
+  .inputGroup {
+    margin-bottom: 5px;
+  }
+
   .savingValue {
     font-weight: 700;
     font-size: 17px;
+  }
+
+  .readOnly {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
   }
   
   @media (max-width: 600px) {
