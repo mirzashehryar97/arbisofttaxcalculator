@@ -1,109 +1,117 @@
 .container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.input[inputmode="numeric"]::-webkit-outer-spin-button,
+.input[inputmode="numeric"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.description {
+  font-size: 16px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: white;
+}
+
+.resultRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.value {
+  text-align: right;
+  font-weight: 400;
+
+}
+
+.inputGroup {
+  margin-bottom: 5px;
+}
+
+.savingValue {
+  font-weight: 700;
+  font-size: 17px;
+}
+
+.readOnly {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 10px;
   }
-  
+
   .title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    text-align: center;
+    font-size: 20px;
   }
-  
+
   .description {
-    font-size: 16px;
-    margin-bottom: 20px;
-    text-align: center;
+    font-size: 14px;
   }
-  
-  .input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-  }
-  
+
+  .input,
   .select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    background-color: white;
+    font-size: 14px;
   }
-  
+
   .resultRow {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    font-size: 16px;
+    font-size: 14px;
   }
-  
-  .label {
-    font-weight: bold;
-  }
-  
-  .value {
-    text-align: right;
-    font-weight: 400;
+}
 
-  }
+@media (max-width: 350px) {
 
-  .inputGroup {
-    margin-bottom: 5px;
-  }
-
-  .savingValue {
-    font-weight: 700;
+  .title {
     font-size: 17px;
   }
 
-  .readOnly {
-    background-color: #f0f0f0;
-    cursor: not-allowed;
-  }
-  
-  @media (max-width: 600px) {
-    .container {
-      padding: 10px;
-    }
-  
-    .title {
-      font-size: 20px;
-    }
-  
-    .description {
-      font-size: 14px;
-    }
-  
-    .input, .select {
-      font-size: 14px;
-    }
-  
-    .resultRow {
-      font-size: 14px;
-    }
+  .description {
+    font-size: 12px;
   }
 
-  @media (max-width: 350px) {
-  
-    .title {
-      font-size: 17px;
-    }
-  
-    .description {
-      font-size: 12px;
-    }
-  
-    .input, .select {
-      font-size: 12px;
-    }
-  
-    .resultRow {
-      font-size: 13px;
-    }
+  .input,
+  .select {
+    font-size: 12px;
   }
+
+  .resultRow {
+    font-size: 13px;
+  }
+}

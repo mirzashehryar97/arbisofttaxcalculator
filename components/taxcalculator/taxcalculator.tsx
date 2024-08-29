@@ -62,15 +62,15 @@ function calculateTax(monthlyIncome: number, monthlyFuelExpense: number): TaxInf
   const totalYearlyExpenses = (monthlyFuelExpense * 12) + (monthlyUtilitiesExpense * 12)
   const revisedYearlyIncomeAfterTax = revisedYearlyIncome - revisedYearlyTax;
   const totalYearlyEarningsAfterTax = revisedYearlyIncomeAfterTax + totalYearlyExpenses;
-  const yearlyTaxSavings =  actualYearlyTax - revisedYearlyTax
-  const yearlyTaxSavingsPercentage = actualYearlyTax > 0 
-    ? (yearlyTaxSavings / actualYearlyTax) * 100 
+  const yearlyTaxSavings = actualYearlyTax - revisedYearlyTax
+  const yearlyTaxSavingsPercentage = actualYearlyTax > 0
+    ? (yearlyTaxSavings / actualYearlyTax) * 100
     : 0;
 
 
   const actualProvidentFund = calculateProvidentFund(monthlyIncome);
   const revisedProvidentFund = calculateProvidentFund(revisedMonthlyIncome);
-  
+
   return {
     monthlyIncome: monthlyIncome,
     monthlyFuelExpense: monthlyFuelExpense,
@@ -121,29 +121,39 @@ const TaxCalculator: React.FC = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Arbisoft Tax Calculator 2024-2025</h1>
-      
+
       <div className={styles.inputGroup}>
         <label className={styles.label}>Monthly Income</label>
         <input
-          type="number"
+          type="text"
+          inputMode="numeric"
+          pattern="[0-9]*"
           className={styles.input}
           placeholder="Enter monthly income"
           value={monthlyIncome}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMonthlyIncome(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            const value = e.target.value.replace(/[^0-9]/g, '');
+            setMonthlyIncome(value);
+          }}
         />
       </div>
-      
+
       <div className={styles.inputGroup}>
         <label className={styles.label}>Monthly Fuel Expense</label>
         <input
-          type="number"
+          type="text"
+          inputMode="numeric"
+          pattern="[0-9]*"
           className={styles.input}
           placeholder="Enter monthly fuel expense"
           value={monthlyFuelExpense}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMonthlyFuelExpense(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            const value = e.target.value.replace(/[^0-9]/g, '');
+            setMonthlyFuelExpense(value);
+          }}
         />
       </div>
-      
+
       <div className={styles.inputGroup}>
         <label className={styles.label}>Monthly Utilities Expense (15% of income)</label>
         <input
@@ -153,7 +163,7 @@ const TaxCalculator: React.FC = () => {
           readOnly
         />
       </div>
-      
+
       <div className={styles.resultRow}>
         <span className={styles.label}>Actual Monthly Income</span>
         <span className={styles.value}>{formatNumber(taxInfo.monthlyIncome)}</span>
