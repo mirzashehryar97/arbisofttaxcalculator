@@ -1,5 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
+import { calculateTaxForTotalAmount } from '@/lib/taxCalculator';
 import styles from './taxcalculator.module.css';
 
 interface TaxInfo {
@@ -27,46 +28,73 @@ interface TaxInfo {
   revisedProvidentFund: number;
 }
 
+const fiscalYears = [
+  { value: "2025-2026", label: "2025-2026" },
+  { value: "2024-2025", label: "2024-2025" },
+  { value: "2023-2024", label: "2023-2024" },
+  { value: "2022-2023", label: "2022-2023" },
+  { value: "2021-2022", label: "2021-2022" },
+  { value: "2020-2021", label: "2020-2021" },
+  { value: "2019-2020", label: "2019-2020" },
+  { value: "2018-2019", label: "2018-2019" },
+  { value: "2017-2018", label: "2017-2018" },
+  { value: "2016-2017", label: "2016-2017" },
+  { value: "2015-2016", label: "2015-2016" },
+  { value: "2014-2015", label: "2014-2015" }
+];
+
 function formatPercentage(num: number): string {
   return num.toFixed(2) + '%';
 }
 
-function calculateYearlyTax(yearlyIncome: number): number {
-  if (yearlyIncome <= 600000) {
-    return 0;
-  } else if (yearlyIncome <= 1200000) {
-    return (yearlyIncome - 600000) * 0.05;
-  } else if (yearlyIncome <= 2200000) {
-    return 30000 + (yearlyIncome - 1200000) * 0.15;
-  } else if (yearlyIncome <= 3200000) {
-    return 180000 + (yearlyIncome - 2200000) * 0.25;
-  } else if (yearlyIncome <= 4100000) {
-    return 430000 + (yearlyIncome - 3200000) * 0.30;
-  } else {
-    return 700000 + (yearlyIncome - 4100000) * 0.35;
+function calculateTax(monthlyIncome: number, monthlyFuelExpense: number, fiscalYear: string): TaxInfo {
+  // If no income is provided, return all zeros
+  if (monthlyIncome <= 0) {
+    return {
+      monthlyIncome: 0,
+      monthlyFuelExpense: 0,
+      monthlyUtilitiesExpense: 0,
+      revisedMonthlyIncome: 0,
+      revisedMonthlyTax: 0,
+      actualMonthlyTax: 0,
+      monthlyTaxSavings: 0,
+      monthlyTaxSavingsPercentage: 0,
+      monthlySalaryAfterTax: 0,
+      revisedMonthlySalaryAfterTax: 0,
+      actualYearlyIncome: 0,
+      revisedYearlyIncome: 0,
+      revisedYearlyTax: 0,
+      actualYearlyTax: 0,
+      yearlyTaxSavings: 0,
+      actualYearlyIncomeAfterTax: 0,
+      revisedYearlyIncomeAfterTax: 0,
+      totalMonthlyEarningsAfterTax: 0,
+      totalYearlyEarningsAfterTax: 0,
+      yearlyTaxSavingsPercentage: 0,
+      actualProvidentFund: 0,
+      revisedProvidentFund: 0
+    };
   }
-}
-
-function calculateTax(monthlyIncome: number, monthlyFuelExpense: number): TaxInfo {
   const monthlyUtilitiesExpense = monthlyIncome * 0.15;
   const revisedMonthlyIncome = Math.max(0, monthlyIncome - monthlyFuelExpense - monthlyUtilitiesExpense);
   const actualYearlyIncome = monthlyIncome * 12;
   const revisedYearlyIncome = revisedMonthlyIncome * 12;
-  const actualYearlyTax = calculateYearlyTax(actualYearlyIncome);
-  const revisedYearlyTax = calculateYearlyTax(revisedYearlyIncome);
+
+  const actualYearlyTax = calculateTaxForTotalAmount(actualYearlyIncome, fiscalYear);
+  const revisedYearlyTax = calculateTaxForTotalAmount(revisedYearlyIncome, fiscalYear);
+
   const actualMonthlyTax = actualYearlyTax / 12;
   const revisedMonthlyTax = revisedYearlyTax / 12;
   const monthlySalaryAfterTax = monthlyIncome - actualMonthlyTax;
   const revisedMonthlySalaryAfterTax = revisedMonthlyIncome - revisedMonthlyTax;
   const totalMonthlyEarningsAfterTax = revisedMonthlySalaryAfterTax + monthlyFuelExpense + monthlyUtilitiesExpense;
-  const totalYearlyExpenses = (monthlyFuelExpense * 12) + (monthlyUtilitiesExpense * 12)
+  const totalYearlyExpenses = (monthlyFuelExpense * 12) + (monthlyUtilitiesExpense * 12);
   const revisedYearlyIncomeAfterTax = revisedYearlyIncome - revisedYearlyTax;
   const totalYearlyEarningsAfterTax = revisedYearlyIncomeAfterTax + totalYearlyExpenses;
-  const yearlyTaxSavings = actualYearlyTax - revisedYearlyTax
+  const yearlyTaxSavings = actualYearlyTax - revisedYearlyTax;
   const yearlyTaxSavingsPercentage = actualYearlyTax > 0
     ? (yearlyTaxSavings / actualYearlyTax) * 100
     : 0;
-
 
   const actualProvidentFund = calculateProvidentFund(monthlyIncome);
   const revisedProvidentFund = calculateProvidentFund(revisedMonthlyIncome);
@@ -110,17 +138,33 @@ function calculateProvidentFund(grossSalary: number): number {
 const TaxCalculator: React.FC = () => {
   const [monthlyIncome, setMonthlyIncome] = useState<string>('');
   const [monthlyFuelExpense, setMonthlyFuelExpense] = useState<string>('');
-  const [taxInfo, setTaxInfo] = useState<TaxInfo>(calculateTax(0, 0));
+  const [fiscalYear, setFiscalYear] = useState<string>('2025-2026');
+  const [taxInfo, setTaxInfo] = useState<TaxInfo>(calculateTax(0, 0, '2025-2026'));
 
   useEffect(() => {
     const income = parseFloat(monthlyIncome) || 0;
     const fuelExpense = parseFloat(monthlyFuelExpense) || 0;
-    setTaxInfo(calculateTax(income, fuelExpense));
-  }, [monthlyIncome, monthlyFuelExpense]);
+    setTaxInfo(calculateTax(income, fuelExpense, fiscalYear));
+  }, [monthlyIncome, monthlyFuelExpense, fiscalYear]);
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Arbisoft Tax Calculator 2024-2025</h1>
+      <h1 className={styles.title}>Arbisoft Tax Calculator {fiscalYear}</h1>
+
+      <div className={styles.inputGroup}>
+        <label className={styles.label}>Fiscal Year</label>
+        <select
+          className={styles.select}
+          value={fiscalYear}
+          onChange={(e) => setFiscalYear(e.target.value)}
+        >
+          {fiscalYears.map((year) => (
+            <option key={year.value} value={year.value}>
+              {year.label}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <div className={styles.inputGroup}>
         <label className={styles.label}>Monthly Income</label>
