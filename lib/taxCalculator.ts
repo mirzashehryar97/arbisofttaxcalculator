@@ -166,7 +166,6 @@ interface TaxBracket {
   export function calculateTaxForTotalAmount(totalAmount: number, fiscalYear: string): number {
     const slabs = taxSlabs[fiscalYear] || taxSlabs["2025-2026"];
     let tax = 0;
-    
     if (fiscalYear === "2018-2019") {
       // Special handling for 2018-2019 tax year
       if (totalAmount <= 400000) {
@@ -189,7 +188,7 @@ interface TaxBracket {
       let taxBracket: TaxBracket | undefined;
       
       for (const slab of slabs) {
-        if (totalAmount > slab.min && (!slab.max || totalAmount <= slab.max)) {
+        if (totalAmount >= slab.min && (!slab.max || totalAmount <= slab.max)) {
           taxBracket = slab;
           break;
         }

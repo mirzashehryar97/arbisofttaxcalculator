@@ -49,32 +49,6 @@ function formatPercentage(num: number): string {
 
 function calculateTax(monthlyIncome: number, monthlyFuelExpense: number, fiscalYear: string): TaxInfo {
   // If no income is provided, return all zeros
-  if (monthlyIncome <= 0) {
-    return {
-      monthlyIncome: 0,
-      monthlyFuelExpense: 0,
-      monthlyUtilitiesExpense: 0,
-      revisedMonthlyIncome: 0,
-      revisedMonthlyTax: 0,
-      actualMonthlyTax: 0,
-      monthlyTaxSavings: 0,
-      monthlyTaxSavingsPercentage: 0,
-      monthlySalaryAfterTax: 0,
-      revisedMonthlySalaryAfterTax: 0,
-      actualYearlyIncome: 0,
-      revisedYearlyIncome: 0,
-      revisedYearlyTax: 0,
-      actualYearlyTax: 0,
-      yearlyTaxSavings: 0,
-      actualYearlyIncomeAfterTax: 0,
-      revisedYearlyIncomeAfterTax: 0,
-      totalMonthlyEarningsAfterTax: 0,
-      totalYearlyEarningsAfterTax: 0,
-      yearlyTaxSavingsPercentage: 0,
-      actualProvidentFund: 0,
-      revisedProvidentFund: 0
-    };
-  }
   const monthlyUtilitiesExpense = monthlyIncome * 0.15;
   const revisedMonthlyIncome = Math.max(0, monthlyIncome - monthlyFuelExpense - monthlyUtilitiesExpense);
   const actualYearlyIncome = monthlyIncome * 12;
