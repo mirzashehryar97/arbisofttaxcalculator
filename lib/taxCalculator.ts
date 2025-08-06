@@ -8,11 +8,11 @@ interface TaxBracket {
   export const taxSlabs: Record<string, TaxBracket[]> = {
     "2025-2026": [
       { min: 0, max: 600000, rate: 0, fixed: 0 },
-      { min: 600001, max: 1200000, rate: 2.5, fixed: 0 },
-      { min: 1200001, max: 2200000, rate: 11, fixed: 15000 },
-      { min: 2200001, max: 3200000, rate: 23, fixed: 125000 },
-      { min: 3200001, max: 4100000, rate: 30, fixed: 355000 },
-      { min: 4100001, max: null, rate: 35, fixed: 625000 }
+      { min: 600001, max: 1200000, rate: 1, fixed: 0 },
+      { min: 1200001, max: 2200000, rate: 11, fixed: 6000 },
+      { min: 2200001, max: 3200000, rate: 23, fixed: 116000 },
+      { min: 3200001, max: 4100000, rate: 30, fixed: 346000 },
+      { min: 4100001, max: null, rate: 35, fixed: 616000 }
     ],
     "2024-2025": [
       { min: 0, max: 600000, rate: 0, fixed: 0 },
