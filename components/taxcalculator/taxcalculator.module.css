@@ -1,117 +1,315 @@
-.container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
+/* ── Page & Container ── */
+.page {
+  min-height: 100vh;
+  background: #f1f5f9;
+  padding: 28px 16px 56px;
 }
 
+.container {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* ── Header ── */
+.header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 4px;
+  letter-spacing: -0.3px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+}
+
+/* ── Card ── */
+.card {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07), 0 4px 14px rgba(0, 0, 0, 0.05);
+  padding: 20px 22px;
+  margin-bottom: 14px;
+}
+
+.cardTitle {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+  margin: 0 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+/* ── Input Grid ── */
+.inputGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 18px;
+}
+
+.inputGroup {
+  margin-bottom: 14px;
+}
+
+.label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.input,
+.select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #1e293b;
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+  appearance: auto;
+}
+
+.input:focus,
+.select:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+/* hide spinners */
 .input[inputmode="numeric"]::-webkit-outer-spin-button,
 .input[inputmode="numeric"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-.title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  text-align: center;
+.readOnly {
+  background: #f8fafc;
+  color: #94a3b8;
+  cursor: default;
+  border-style: dashed;
 }
 
-.description {
-  font-size: 16px;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.input {
+/* ── Comparison Table ── */
+.comparisonTable {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
 }
 
-.select {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-  background-color: white;
+.comparisonHeader {
+  display: grid;
+  grid-template-columns: 1fr 120px 120px;
+  gap: 8px;
+  padding-bottom: 8px;
+  margin-bottom: 2px;
 }
 
-.resultRow {
+.colHeader {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  text-align: right;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.colActualHeader {
+  color: #64748b;
+  background: #f8fafc;
+}
+
+.colRevisedHeader {
+  color: #4f46e5;
+  background: #eef2ff;
+}
+
+.comparisonRow {
+  display: grid;
+  grid-template-columns: 1fr 120px 120px;
+  gap: 8px;
+  padding: 11px 0;
+  border-bottom: 1px solid #f1f5f9;
+  align-items: center;
+}
+
+.comparisonRow:last-child {
+  border-bottom: none;
+}
+
+.rowLabel {
+  font-size: 14px;
+  color: #334155;
+  font-weight: 500;
+}
+
+.colActual {
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748b;
+  text-align: right;
+  padding-right: 8px;
+}
+
+.colRevised {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4f46e5;
+  text-align: right;
+  padding-right: 8px;
+}
+
+/* ── Savings Card ── */
+.savingsCard {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 1px solid #bbf7d0;
+}
+
+.savingsCard .cardTitle {
+  color: #16a34a;
+  border-bottom-color: #bbf7d0;
+}
+
+.savingsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.savingsStat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.savingsLabel {
+  font-size: 12px;
+  color: #15803d;
+  font-weight: 600;
+}
+
+.savingsBig {
+  font-size: 20px;
+  font-weight: 800;
+  color: #16a34a;
+  letter-spacing: -0.3px;
+}
+
+/* ── Take-Home Card ── */
+.takeHomeCard {
+  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+  border: 1px solid #c7d2fe;
+}
+
+.takeHomeCard .cardTitle {
+  color: #4338ca;
+  border-bottom-color: #c7d2fe;
+}
+
+.takeHomeRow {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
-  font-size: 16px;
+  align-items: center;
+  padding: 9px 0;
+  font-size: 14px;
+  color: #3730a3;
+  gap: 16px;
 }
 
-.label {
-  font-weight: bold;
+.takeHomeRow span:last-child {
+  font-weight: 600;
+  white-space: nowrap;
 }
 
-.value {
-  text-align: right;
-  font-weight: 400;
-
-}
-
-.inputGroup {
-  margin-bottom: 5px;
-}
-
-.savingValue {
+.tag {
+  display: inline-block;
+  font-size: 10px;
   font-weight: 700;
-  font-size: 17px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(99, 102, 241, 0.15);
+  color: #4338ca;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+  vertical-align: middle;
 }
 
-.readOnly {
-  background-color: #f0f0f0;
-  cursor: not-allowed;
+.takeHomeDivider {
+  height: 1.5px;
+  background: linear-gradient(to right, transparent, #a5b4fc, transparent);
+  margin: 6px 0;
 }
 
+.netTakeHome {
+  font-size: 15px;
+  font-weight: 700;
+  color: #312e81;
+  padding-top: 10px;
+}
+
+.netTakeHome span:last-child {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+/* ── Responsive ── */
 @media (max-width: 600px) {
-  .container {
-    padding: 10px;
+  .inputGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .comparisonHeader,
+  .comparisonRow {
+    grid-template-columns: 1fr 100px 100px;
+  }
+
+  .card {
+    padding: 16px;
   }
 
   .title {
-    font-size: 20px;
+    font-size: 22px;
   }
 
-  .description {
-    font-size: 14px;
-  }
-
-  .input,
-  .select {
-    font-size: 14px;
-  }
-
-  .resultRow {
-    font-size: 14px;
-  }
-}
-
-@media (max-width: 350px) {
-
-  .title {
+  .savingsBig {
     font-size: 17px;
   }
 
-  .description {
-    font-size: 12px;
+  .netTakeHome span:last-child {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 400px) {
+  .comparisonHeader,
+  .comparisonRow {
+    grid-template-columns: 1fr 84px 84px;
   }
 
-  .input,
-  .select {
-    font-size: 12px;
-  }
-
-  .resultRow {
+  .colActual,
+  .colRevised {
     font-size: 13px;
+  }
+
+  .title {
+    font-size: 18px;
   }
 }
