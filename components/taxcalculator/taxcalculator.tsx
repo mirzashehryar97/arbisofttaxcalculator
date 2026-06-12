@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { calculateTaxForTotalAmount } from '@/lib/taxCalculator';
+import { calculateTaxForTotalAmount, taxSlabs } from '@/lib/taxCalculator';
 import styles from './taxcalculator.module.css';
 
 interface TaxInfo {
@@ -28,21 +28,8 @@ interface TaxInfo {
   revisedProvidentFund: number;
 }
 
-const fiscalYears = [
-  { value: "2026-2027", label: "2026-2027" },
-  { value: "2025-2026", label: "2025-2026" },
-  { value: "2024-2025", label: "2024-2025" },
-  { value: "2023-2024", label: "2023-2024" },
-  { value: "2022-2023", label: "2022-2023" },
-  { value: "2021-2022", label: "2021-2022" },
-  { value: "2020-2021", label: "2020-2021" },
-  { value: "2019-2020", label: "2019-2020" },
-  { value: "2018-2019", label: "2018-2019" },
-  { value: "2017-2018", label: "2017-2018" },
-  { value: "2016-2017", label: "2016-2017" },
-  { value: "2015-2016", label: "2015-2016" },
-  { value: "2014-2015", label: "2014-2015" }
-];
+const fiscalYears = Object.keys(taxSlabs).map((year) => ({ value: year, label: year }));
+const defaultFiscalYear = fiscalYears[0].value;
 
 function formatPercentage(num: number): string {
   return num.toFixed(2) + '%';
@@ -111,8 +98,8 @@ function calculateProvidentFund(grossSalary: number): number {
 const TaxCalculator: React.FC = () => {
   const [monthlyIncome, setMonthlyIncome] = useState<string>('');
   const [monthlyFuelExpense, setMonthlyFuelExpense] = useState<string>('');
-  const [fiscalYear, setFiscalYear] = useState<string>('2025-2026');
-  const [taxInfo, setTaxInfo] = useState<TaxInfo>(calculateTax(0, 0, '2025-2026'));
+  const [fiscalYear, setFiscalYear] = useState<string>(defaultFiscalYear);
+  const [taxInfo, setTaxInfo] = useState<TaxInfo>(calculateTax(0, 0, defaultFiscalYear));
 
   useEffect(() => {
     const income = parseFloat(monthlyIncome) || 0;
